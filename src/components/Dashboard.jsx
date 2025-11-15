@@ -1,4 +1,7 @@
+import { useTheme } from '../contexts/ThemeContext';
+
 const Dashboard = ({ activePage }) => {
+    const { isDark } = useTheme();
     const getPageContent = () => {
         switch(activePage) {
             case 'Clients':
@@ -56,12 +59,12 @@ const Dashboard = ({ activePage }) => {
 
 
     return (
-        <div className="bg-slate-900 text-white min-h-full p-8">
+        <div className={`${isDark ? 'bg-slate-900 text-white' : 'bg-gray-50 text-gray-900'} min-h-full p-8`}>
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-start mb-8">
                     <div>
                         <h1 className="text-3xl font-bold mb-2">{content.title}</h1>
-                        <p className="text-gray-400">{content.description}</p>
+                        <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{content.description}</p>
                     </div>
                     <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium flex items-center">
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,16 +76,16 @@ const Dashboard = ({ activePage }) => {
 
                 <div className="mb-8">
                     <h2 className="text-xl font-semibold mb-2">{activePage === 'Website Development' ? 'Engineering Tracks' : 'Overview'}</h2>
-                    <p className="text-gray-400 mb-6">{activePage === 'Website Development' ? 'Compose reliable digital products backed by automation.' : `Manage your ${activePage.toLowerCase()} efficiently with these tools.`}</p>
+                    <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6`}>{activePage === 'Website Development' ? 'Compose reliable digital products backed by automation.' : `Manage your ${activePage.toLowerCase()} efficiently with these tools.`}</p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {content.tracks.map((track, index) => (
-                            <div key={index} className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <div key={index} className={`${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-gray-200'} rounded-xl p-6 border`}>
                                 <div className="flex items-start space-x-4">
                                     <div className="text-2xl">{track.icon}</div>
                                     <div>
                                         <h3 className="font-semibold text-lg mb-2">{track.title}</h3>
-                                        <p className="text-gray-400 text-sm leading-relaxed">{track.description}</p>
+                                        <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-sm leading-relaxed`}>{track.description}</p>
                                     </div>
                                 </div>
                             </div>

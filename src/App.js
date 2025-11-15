@@ -3,12 +3,14 @@ import './App.css';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 
-function App() {
+function AppContent() {
   const [activePage, setActivePage] = useState('Website Development');
+  const { isDark } = useTheme();
 
   return (
-    <div className="flex h-screen bg-slate-900">
+    <div className={`flex h-screen ${isDark ? 'bg-slate-900' : 'bg-gray-100'}`}>
       <div className="flex-shrink-0">
         <Sidebar activePage={activePage} setActivePage={setActivePage} />
       </div>
@@ -20,6 +22,14 @@ function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 

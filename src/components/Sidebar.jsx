@@ -1,4 +1,7 @@
+import { useTheme } from '../contexts/ThemeContext';
+
 const Sidebar = ({ activePage, setActivePage }) => {
+  const { isDark } = useTheme();
 
   const operationsItems = [
     { name: 'Clients', icon: '👥' },
@@ -16,15 +19,15 @@ const Sidebar = ({ activePage, setActivePage }) => {
   ];
 
   return (
-    <div className="w-64 bg-slate-900 text-white flex flex-col h-screen">
+    <div className={`w-64 ${isDark ? 'bg-slate-900 text-white' : 'bg-white text-gray-900 border-r border-gray-200'} flex flex-col h-screen`}>
       <div className="p-6">
         <h2 className="text-xl font-bold">BillingFlow</h2>
-        <p className="text-xs text-gray-400 uppercase tracking-wide">HOSTING PORTAL</p>
+        <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} uppercase tracking-wide`}>HOSTING PORTAL</p>
       </div>
       
       <div className="flex-1 px-4">
         <div className="mb-8">
-          <h3 className="text-xs text-gray-400 uppercase tracking-wide mb-4 px-2">OPERATIONS</h3>
+          <h3 className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} uppercase tracking-wide mb-4 px-2`}>OPERATIONS</h3>
           <nav className="space-y-1">
             {operationsItems.map((item) => (
               <button
@@ -33,7 +36,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
                 className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors w-full text-left ${
                   activePage === item.name
                     ? 'bg-blue-600 text-white'
-                    : 'hover:bg-slate-800'
+                    : isDark ? 'hover:bg-slate-800' : 'hover:bg-gray-100'
                 }`}
               >
                 <span className="mr-3">{item.icon}</span>
@@ -44,7 +47,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
         </div>
 
         <div>
-          <h3 className="text-xs text-gray-400 uppercase tracking-wide mb-4 px-2">SOLUTIONS</h3>
+          <h3 className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} uppercase tracking-wide mb-4 px-2`}>SOLUTIONS</h3>
           <nav className="space-y-1">
             {solutionsItems.map((item) => (
               <button
@@ -53,7 +56,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
                 className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors w-full text-left ${
                   activePage === item.name
                     ? 'bg-blue-600 text-white'
-                    : 'hover:bg-slate-800'
+                    : isDark ? 'hover:bg-slate-800' : 'hover:bg-gray-100'
                 }`}
               >
                 <span className="mr-3">{item.icon}</span>
@@ -64,7 +67,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
         </div>
       </div>
       
-      <div className="p-4 text-xs text-gray-500">
+      <div className={`p-4 text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
         © 2025 BillingFlow. All rights reserved.
       </div>
     </div>
