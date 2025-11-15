@@ -1,11 +1,13 @@
+body { font-family: "Roboto", sans-serif;}
+
 .App {
   text-align: center;
+  background-color: #0b1228;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+input#search{padding:10px}
+.logo {font-size:28px;font-weight: bold;}
+.logo p{font-size:16px;font-weight:300;color:grey}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -14,14 +16,15 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  
+  min-height: 100px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items:flex-start;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding-left:15px;
 }
 
 .App-link {
