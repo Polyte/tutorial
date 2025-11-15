@@ -1,9 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
+import Scheduler from './Scheduler';
 
 const Header = ({ activePage }) => {
   const { isDark, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showScheduler, setShowScheduler] = useState(false);
   const [notifications] = useState([
     { id: 1, message: 'New order received', time: '2 min ago', unread: true },
     { id: 2, message: 'Build pipeline completed', time: '5 min ago', unread: true },
@@ -42,7 +46,10 @@ const Header = ({ activePage }) => {
             New Order
           </button>
           
-          <button className={`${isDark ? 'bg-slate-800 hover:bg-slate-700' : 'bg-gray-200 hover:bg-gray-300 text-gray-900'} px-4 py-2 rounded-lg text-sm font-medium flex items-center`}>
+          <button 
+            onClick={() => setShowScheduler(true)}
+            className={`${isDark ? 'bg-slate-800 hover:bg-slate-700' : 'bg-gray-200 hover:bg-gray-300 text-gray-900'} px-4 py-2 rounded-lg text-sm font-medium flex items-center`}
+          >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
@@ -113,10 +120,10 @@ const Header = ({ activePage }) => {
               BA
             </div>
             <div>
-              <div className="text-sm font-medium">BillingFlow Admin</div>
-              <div className="text-xs text-gray-400">admin@billingflow.dev</div>
+              <div className="text-sm font-medium">{user?.name}</div>
+              <div className="text-xs text-gray-400">{user?.email}</div>
             </div>
-            <button className="text-gray-400 hover:text-white">
+            <button onClick={logout} className="text-gray-400 hover:text-white">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
@@ -124,6 +131,7 @@ const Header = ({ activePage }) => {
           </div>
         </div>
       </div>
+      {showScheduler && <Scheduler onClose={() => setShowScheduler(false)} />}
     </header>
   );
 };

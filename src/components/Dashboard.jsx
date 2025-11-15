@@ -1,7 +1,32 @@
+import { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
+import { db } from '../utils/database';
+import QuickForm from './QuickForm';
 
 const Dashboard = ({ activePage }) => {
     const { isDark } = useTheme();
+    const [data, setData] = useState({ clients: [], services: [], orders: [] });
+    const [showForm, setShowForm] = useState(false);
+
+    useEffect(() => {
+        setData({
+            clients: db.getClients(),
+            services: db.getServices(),
+            orders: db.getOrders()
+        });
+    }, [activePage]);
+
+    const handleAdd = (type, item) => {
+        if (type === 'client') db.addClient(item);
+        if (type === 'service') db.addService(item);
+        if (type === 'order') db.addOrder(item);
+        setData({
+            clients: db.getClients(),
+            services: db.getServices(),
+            orders: db.getOrders()
+        });
+        setShowForm(false);
+    };
     const getPageContent = () => {
         switch(activePage) {
             case 'Clients':
@@ -66,7 +91,10 @@ const Dashboard = ({ activePage }) => {
                         <h1 className="text-3xl font-bold mb-2">{content.title}</h1>
                         <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{content.description}</p>
                     </div>
-                    <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium flex items-center">
+                    <button 
+                        onClick={() => setShowForm(true)}
+                        className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium flex items-center"
+                    >
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                         </svg>
@@ -79,7 +107,28 @@ const Dashboard = ({ activePage }) => {
                     <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6`}>{activePage === 'Website Development' ? 'Compose reliable digital products backed by automation.' : `Manage your ${activePage.toLowerCase()} efficiently with these tools.`}</p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {content.tracks.map((track, index) => (
+                        {activePage === 'Clients' && data.clients.map((client) => (
+                            <div key={client.id} className={`${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-gray-200'} rounded-xl p-6 border`}>
+                                <h3 className="font-semibold text-lg mb-2">{client.name}</h3>
+                                <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-sm`}>{client.email}</p>
+                                <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-sm`}>{client.projects} projects</p>
+                            </div>
+                        ))}
+                        {activePage === 'Services' && data.services.map((service) => (
+                            <div key={service.id} className={`${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-gray-200'} rounded-xl p-6 border`}>
+                                <h3 className="font-semibold text-lg mb-2">{service.name}</h3>
+                                <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-sm`}>{service.description}</p>
+                                <p className="text-blue-500 font-medium">${service.price}</p>
+                            </div>
+                        ))}
+                        {activePage === 'Orders' && data.orders.map((order) => (
+                            <div key={order.id} className={`${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-gray-200'} rounded-xl p-6 border`}>
+                                <h3 className="font-semibold text-lg mb-2">Order #{order.id}</h3>
+                                <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-sm`}>Status: {order.status}</p>
+                                <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-sm`}>Date: {order.date}</p>
+                            </div>
+                        ))}
+                        {!['Clients', 'Services', 'Orders'].includes(activePage) && content.tracks.map((track, index) => (
                             <div key={index} className={`${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-gray-200'} rounded-xl p-6 border`}>
                                 <div className="flex items-start space-x-4">
                                     <div className="text-2xl">{track.icon}</div>
@@ -92,6 +141,15 @@ const Dashboard = ({ activePage }) => {
                         ))}
                     </div>
                 </div>
+                
+                {showForm && (
+                    <QuickForm 
+                        type={activePage.toLowerCase().slice(0, -1)} 
+                        onSubmit={handleAdd} 
+                        onClose={() => setShowForm(false)} 
+                        isDark={isDark}
+                    />
+                )}
             </div>
         </div>
     );
